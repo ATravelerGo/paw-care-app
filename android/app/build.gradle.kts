@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.paw_care_app"
+    namespace = "com.zhangchen.pawcare"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.paw_care_app"
+        applicationId = "com.zhangchen.pawcare"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion

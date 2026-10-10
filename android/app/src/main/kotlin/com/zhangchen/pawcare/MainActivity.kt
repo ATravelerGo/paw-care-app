@@ -1,4 +1,4 @@
-package com.example.paw_care_app
+package com.zhangchen.pawcare
 
 import io.flutter.embedding.android.FlutterActivity
 
