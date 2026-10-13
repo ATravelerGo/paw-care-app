@@ -28,10 +28,7 @@ void main() {
     await tester.pumpAndSettle(const Duration(milliseconds: 100));
     expect(find.byKey(const Key('login_email_field')), findsOneWidget);
 
-    await tester.enterText(
-      find.byKey(const Key('login_email_field')),
-      email,
-    );
+    await tester.enterText(find.byKey(const Key('login_email_field')), email);
     await tester.enterText(
       find.byKey(const Key('login_password_field')),
       password,
@@ -39,17 +36,29 @@ void main() {
     await tester.tap(find.byKey(const Key('login_submit_button')));
     await tester.pumpAndSettle(const Duration(milliseconds: 100));
 
-    expect(find.byKey(const Key('logout_button')), findsOneWidget);
-    expect(find.text('你好，Phase1 Test'), findsOneWidget);
+    expect(find.text('先创建第一只宠物吧'), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pumpAndSettle();
     await tester.pumpWidget(_testApp(config));
     await tester.pumpAndSettle(const Duration(milliseconds: 100));
 
-    expect(find.byKey(const Key('logout_button')), findsOneWidget);
-    expect(find.text('你好，Phase1 Test'), findsOneWidget);
+    expect(find.text('先创建第一只宠物吧'), findsOneWidget);
 
+    await tester.tap(find.byKey(const Key('nav_health')));
+    await tester.pumpAndSettle();
+    expect(find.text('健康记录即将开放'), findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('nav_ai')));
+    await tester.pumpAndSettle();
+    expect(find.text('PawCare AI 即将开放'), findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('nav_gallery')));
+    await tester.pumpAndSettle();
+    expect(find.text('宠物相册即将开放'), findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('nav_profile')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('logout_button')));
     await tester.pumpAndSettle(const Duration(milliseconds: 100));
 

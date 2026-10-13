@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
 
 class AppLoadingView extends StatelessWidget {
-  const AppLoadingView({this.message = '正在加载…', super.key});
+  const AppLoadingView({
+    this.message = '正在加载…',
+    this.animate = true,
+    super.key,
+  });
 
   final String? message;
+  final bool animate;
 
   @override
   Widget build(BuildContext context) {
     return _AppStateLayout(
-      indicator: const SizedBox.square(
+      indicator: SizedBox.square(
         dimension: 32,
-        child: CircularProgressIndicator(strokeWidth: 3),
+        child: CircularProgressIndicator(
+          value: animate ? null : 0.5,
+          strokeWidth: 3,
+        ),
       ),
       message: message,
     );
