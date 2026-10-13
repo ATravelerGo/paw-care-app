@@ -83,7 +83,7 @@ class _HomeBody extends StatelessWidget {
         message: '创建后，健康记录和 AI 问诊都会围绕它展开。',
         icon: Icons.pets_outlined,
         actionLabel: '创建宠物档案',
-        onAction: () => context.go(AppRoutePaths.createPet),
+        onAction: () => context.push(AppRoutePaths.createPet),
       ),
       PetListStatus.ready => _PetHomeOverview(
         pet: petController.currentPet!,
@@ -169,7 +169,7 @@ class _PetCard extends StatelessWidget {
     return Card(
       clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: () => context.go(AppRoutePaths.pets),
+        onTap: () => context.push(AppRoutePaths.pets),
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Row(

@@ -23,6 +23,7 @@ final class FakeHealthRepository implements HealthRepository {
       title: draft.title,
       description: draft.description,
       recordDate: draft.recordDate,
+      metadata: draft.metadata,
     );
     records.add(record);
     return record;
@@ -41,6 +42,7 @@ final class FakeHealthRepository implements HealthRepository {
       title: draft.title,
       description: draft.description,
       recordDate: draft.recordDate,
+      metadata: draft.metadata,
     );
     records = [for (final item in records) item.id == recordId ? record : item];
     return record;

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-
 import '../../../../app/route_paths.dart';
+import '../../../../shared/widgets/app_back_button.dart';
 import '../../../../shared/widgets/app_state_view.dart';
 import '../../application/conversation_controllers.dart';
 import '../../application/conversation_providers.dart';
@@ -47,10 +46,9 @@ class _ConversationDetailPageState
       listenable: controller,
       builder: (context, _) => Scaffold(
         appBar: AppBar(
-          leading: IconButton(
+          leading: const AppBackButton(
+            fallbackLocation: AppRoutePaths.conversations,
             tooltip: '返回会话列表',
-            onPressed: () => context.go(AppRoutePaths.conversations),
-            icon: const Icon(Icons.arrow_back_rounded),
           ),
           title: Text(controller.detail?.title ?? '健康咨询'),
         ),

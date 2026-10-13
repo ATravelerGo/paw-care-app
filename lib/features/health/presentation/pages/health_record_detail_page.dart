@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/route_paths.dart';
+import '../../../../shared/widgets/app_back_button.dart';
 import '../../application/health_providers.dart';
 
 class HealthRecordDetailPage extends ConsumerWidget {
@@ -16,18 +17,28 @@ class HealthRecordDetailPage extends ConsumerWidget {
     final record = controller.recordById(recordId);
     if (record == null) {
       return Scaffold(
-        appBar: AppBar(title: const Text('健康记录详情')),
+        appBar: AppBar(
+          leading: const AppBackButton(
+            fallbackLocation: AppRoutePaths.health,
+            tooltip: '返回健康记录',
+          ),
+          title: const Text('健康记录详情'),
+        ),
         body: const Center(child: Text('找不到这条记录。')),
       );
     }
     return Scaffold(
       appBar: AppBar(
+        leading: const AppBackButton(
+          fallbackLocation: AppRoutePaths.health,
+          tooltip: '返回健康记录',
+        ),
         title: const Text('健康记录详情'),
         actions: [
           IconButton(
             tooltip: '编辑记录',
             onPressed: () =>
-                context.go(AppRoutePaths.editHealthRecord(record.id)),
+                context.push(AppRoutePaths.editHealthRecord(record.id)),
             icon: const Icon(Icons.edit_outlined),
           ),
         ],

@@ -13,6 +13,7 @@ import '../features/home/presentation/pages/module_placeholder_page.dart';
 import '../features/health/presentation/pages/health_record_form_page.dart';
 import '../features/health/presentation/pages/health_record_detail_page.dart';
 import '../features/health/presentation/pages/health_records_page.dart';
+import '../features/health/presentation/pages/weight_trend_page.dart';
 import '../features/pets/presentation/pages/pet_details_page.dart';
 import '../features/pets/presentation/pages/pet_form_page.dart';
 import '../features/pets/presentation/pages/pet_list_page.dart';
@@ -52,7 +53,13 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: 'new',
-                builder: (context, state) => const HealthRecordFormPage(),
+                builder: (context, state) => HealthRecordFormPage(
+                  initialRecordType: state.uri.queryParameters['type'],
+                ),
+              ),
+              GoRoute(
+                path: 'weight-trend',
+                builder: (context, state) => const WeightTrendPage(),
               ),
               GoRoute(
                 path: ':recordId/edit',

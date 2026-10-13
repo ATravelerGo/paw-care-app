@@ -2,14 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../app/route_paths.dart';
 import '../../../../core/error/app_exception.dart';
+import '../../../../shared/widgets/app_back_button.dart';
 import '../../application/health_controller.dart';
 import '../../application/health_providers.dart';
 import '../../domain/models/health_record.dart';
+import '../../domain/models/weight_trend.dart';
 
 class HealthRecordFormPage extends ConsumerStatefulWidget {
-  const HealthRecordFormPage({this.recordId, super.key});
+  const HealthRecordFormPage({
+    this.recordId,
+    this.initialRecordType,
+    super.key,
+  });
   final String? recordId;
+  final String? initialRecordType;
 
   @override
   ConsumerState<HealthRecordFormPage> createState() =>
@@ -34,6 +42,16 @@ class _HealthRecordFormPageState extends ConsumerState<HealthRecordFormPage> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    final initialRecordType = widget.initialRecordType;
+    if (initialRecordType != null &&
+        _types.any((item) => item.$1 == initialRecordType)) {
+      _type = initialRecordType;
+    }
+  }
+
+  @override
   void dispose() {
     _title.dispose();
     _description.dispose();
@@ -52,19 +70,39 @@ class _HealthRecordFormPageState extends ConsumerState<HealthRecordFormPage> {
         if (widget.recordId != null &&
             record == null &&
             controller.status == HealthRecordsStatus.loading) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
+          return Scaffold(
+            appBar: AppBar(
+              leading: AppBackButton(
+                fallbackLocation: AppRoutePaths.healthRecordDetails(
+                  widget.recordId!,
+                ),
+              ),
+              title: const Text('编辑健康记录'),
+            ),
+            body: const Center(child: CircularProgressIndicator()),
           );
         }
         if (widget.recordId != null && record == null) {
           return Scaffold(
-            appBar: AppBar(title: const Text('编辑健康记录')),
+            appBar: AppBar(
+              leading: AppBackButton(
+                fallbackLocation: AppRoutePaths.healthRecordDetails(
+                  widget.recordId!,
+                ),
+              ),
+              title: const Text('编辑健康记录'),
+            ),
             body: const Center(child: Text('找不到这条记录。')),
           );
         }
         _populate(record);
         return Scaffold(
           appBar: AppBar(
+            leading: AppBackButton(
+              fallbackLocation: widget.recordId == null
+                  ? AppRoutePaths.health
+                  : AppRoutePaths.healthRecordDetails(widget.recordId!),
+            ),
             title: Text(widget.recordId == null ? '添加健康记录' : '编辑健康记录'),
           ),
           body: Form(
@@ -100,12 +138,22 @@ class _HealthRecordFormPageState extends ConsumerState<HealthRecordFormPage> {
                   controller: _description,
                   minLines: 3,
                   maxLines: 6,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: '记录内容',
-                    hintText: '描述症状、检查结果或日常变化',
+                    hintText: _type == 'weight'
+                        ? '例如：5.2 kg'
+                        : '描述症状、检查结果或日常变化',
                   ),
-                  validator: (value) =>
-                      value == null || value.trim().isEmpty ? '请填写记录内容' : null,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return '请填写记录内容';
+                    }
+                    if (_type == 'weight' &&
+                        parseWeightKilograms(value) == null) {
+                      return '请输入有效体重，例如 5.2 kg';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 16),
                 ListTile(
@@ -157,6 +205,9 @@ class _HealthRecordFormPageState extends ConsumerState<HealthRecordFormPage> {
 
   Future<void> _save(HealthController controller) async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
+    final weight = _type == 'weight'
+        ? parseWeightKilograms(_description.text)
+        : null;
     try {
       await controller.save(
         HealthRecordDraft(
@@ -164,6 +215,7 @@ class _HealthRecordFormPageState extends ConsumerState<HealthRecordFormPage> {
           title: _title.text,
           description: _description.text,
           recordDate: _date,
+          metadata: weight == null ? const {} : {'weight': weight},
         ),
         recordId: widget.recordId,
       );

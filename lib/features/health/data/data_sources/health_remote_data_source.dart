@@ -67,6 +67,7 @@ final class ApiHealthRemoteDataSource implements HealthRemoteDataSource {
     if (draft.title.trim().isNotEmpty) 'title': draft.title.trim(),
     'description': draft.description.trim(),
     'recordDate': draft.recordDate.toUtc().toIso8601String(),
+    if (draft.metadata.isNotEmpty) 'metadata': draft.metadata,
   };
 
   HealthRecord _fromJson(dynamic value, String petId) {

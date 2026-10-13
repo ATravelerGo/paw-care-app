@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/route_paths.dart';
+import '../../../../shared/widgets/app_back_button.dart';
 import '../../../../shared/widgets/app_state_view.dart';
 import '../../application/pet_controller.dart';
 import '../../application/pet_providers.dart';
@@ -28,12 +29,18 @@ class _PetListPageState extends ConsumerState<PetListPage> {
     return ListenableBuilder(
       listenable: controller,
       builder: (context, _) => Scaffold(
-        appBar: AppBar(title: const Text('我的宠物')),
+        appBar: AppBar(
+          leading: const AppBackButton(
+            fallbackLocation: AppRoutePaths.home,
+            tooltip: '返回首页',
+          ),
+          title: const Text('我的宠物'),
+        ),
         floatingActionButton: FloatingActionButton.extended(
           key: const Key('create_pet_button'),
           onPressed: controller.isSaving
               ? null
-              : () => context.go(AppRoutePaths.createPet),
+              : () => context.push(AppRoutePaths.createPet),
           icon: const Icon(Icons.add_rounded),
           label: const Text('添加宠物'),
         ),
@@ -93,7 +100,7 @@ class _PetListTile extends StatelessWidget {
     return Card(
       clipBehavior: Clip.antiAlias,
       child: ListTile(
-        onTap: () => context.go(AppRoutePaths.petDetails(pet.id)),
+        onTap: () => context.push(AppRoutePaths.petDetails(pet.id)),
         leading: CircleAvatar(child: const Icon(Icons.pets_rounded)),
         title: Text(pet.name),
         subtitle: Text(

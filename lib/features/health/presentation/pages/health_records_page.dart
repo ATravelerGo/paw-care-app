@@ -70,13 +70,19 @@ class _HealthRecordsPageState extends ConsumerState<HealthRecordsPage> {
           message: '创建宠物后即可记录它的健康情况。',
           icon: Icons.pets_outlined,
           actionLabel: '创建宠物档案',
-          onAction: () => context.go(AppRoutePaths.createPet),
+          onAction: () => context.push(AppRoutePaths.createPet),
         );
       }
       return Scaffold(
         appBar: AppBar(
           title: const Text('健康记录'),
           actions: [
+            IconButton(
+              key: const Key('weight_trend_button'),
+              tooltip: '体重趋势',
+              onPressed: () => context.push(AppRoutePaths.weightTrend),
+              icon: const Icon(Icons.show_chart_rounded),
+            ),
             if (_pets.pets.length > 1)
               PopupMenuButton<String>(
                 tooltip: '切换宠物',
@@ -91,7 +97,7 @@ class _HealthRecordsPageState extends ConsumerState<HealthRecordsPage> {
         ),
         floatingActionButton: FloatingActionButton.extended(
           key: const Key('add_health_record_button'),
-          onPressed: () => context.go(AppRoutePaths.newHealthRecord),
+          onPressed: () => context.push(AppRoutePaths.newHealthRecord),
           icon: const Icon(Icons.add_rounded),
           label: const Text('添加记录'),
         ),
@@ -151,10 +157,10 @@ class _HealthRecordsPageState extends ConsumerState<HealthRecordsPage> {
         separatorBuilder: (_, _) => const SizedBox(height: 8),
         itemBuilder: (context, index) => _RecordCard(
           record: _health.visibleRecords[index],
-          onOpen: () => context.go(
+          onOpen: () => context.push(
             AppRoutePaths.healthRecordDetails(_health.visibleRecords[index].id),
           ),
-          onEdit: () => context.go(
+          onEdit: () => context.push(
             AppRoutePaths.editHealthRecord(_health.visibleRecords[index].id),
           ),
           onDelete: () => _confirmDelete(_health.visibleRecords[index]),

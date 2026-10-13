@@ -46,7 +46,7 @@ class ProfilePage extends StatelessWidget {
             title: const Text('宠物档案'),
             subtitle: const Text('创建、切换和管理宠物'),
             trailing: const Icon(Icons.chevron_right_rounded),
-            onTap: () => context.go(AppRoutePaths.pets),
+            onTap: () => context.push(AppRoutePaths.pets),
           ),
         ),
       ],

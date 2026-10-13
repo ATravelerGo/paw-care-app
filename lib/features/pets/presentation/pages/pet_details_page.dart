@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../app/route_paths.dart';
 import '../../../../core/error/app_exception.dart';
+import '../../../../shared/widgets/app_back_button.dart';
 import '../../../../shared/widgets/app_state_view.dart';
 import '../../application/pet_controller.dart';
 import '../../application/pet_providers.dart';
@@ -34,6 +35,10 @@ class _PetDetailsPageState extends ConsumerState<PetDetailsPage> {
         final pet = controller.petById(widget.petId);
         return Scaffold(
           appBar: AppBar(
+            leading: const AppBackButton(
+              fallbackLocation: AppRoutePaths.pets,
+              tooltip: '返回宠物列表',
+            ),
             title: const Text('宠物详情'),
             actions: [
               if (pet != null)
@@ -41,7 +46,7 @@ class _PetDetailsPageState extends ConsumerState<PetDetailsPage> {
                   tooltip: '编辑',
                   onPressed: controller.isSaving
                       ? null
-                      : () => context.go(AppRoutePaths.editPet(pet.id)),
+                      : () => context.push(AppRoutePaths.editPet(pet.id)),
                   icon: const Icon(Icons.edit_outlined),
                 ),
             ],

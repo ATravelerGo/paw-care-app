@@ -15,7 +15,7 @@
 - Agent 创建的 symptom 记录可以在健康页显示。
 - iPhone 18 Pro 模拟器 Xcode debug 构建成功。
 - `flutter analyze` 无问题。
-- Flutter 单元与组件测试共 55 项通过。
+- Flutter 单元与组件测试共 58 项通过。
 
 ## 自动化验收入口
 
@@ -53,13 +53,13 @@ MVP 联调流程覆盖：
 
 ## 当前阻塞项
 
-### Agent 最终回复
+### AI 模型用量限制
 
-用户陈述健康事实后，Health Agent 能创建记录，但 Supervisor 没有返回并持久化最终助手消息，请求最终超时。需要在后端 Agent 链路继续定位 `supervisorAgent.invoke()` 的工具调用后续阶段。
+Supervisor 并行调用子 Agent 时的状态冲突已经修复，Health Agent 的运行时日期也已注入。当前豆包账号触发“安全体验模式”用量上限，模型服务返回 429，因此组合请求的完整最终回复仍需在解除额度限制后复验。
 
-### 相对日期
+### 已修复：相对日期
 
-测试时间为 2026-10-13，Agent 将“今天”写成了 `2024-05-20`。当前 Health Agent 提示词没有注入运行时当前日期，需要由后端提供可靠的日期上下文。
+Health Agent 已按 `Asia/Shanghai` 注入运行时当前日期。修复后的运行探针已将“今天”正确写入为 `2026-10-13`。
 
 ### Android 构建
 

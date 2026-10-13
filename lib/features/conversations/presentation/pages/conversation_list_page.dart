@@ -62,7 +62,7 @@ class _ConversationListPageState extends ConsumerState<ConversationListPage> {
             message: 'AI 会围绕当前宠物提供健康建议。',
             icon: Icons.pets_outlined,
             actionLabel: '创建宠物档案',
-            onAction: () => context.go(AppRoutePaths.createPet),
+            onAction: () => context.push(AppRoutePaths.createPet),
           );
         }
         return _ConversationListBody(
@@ -86,7 +86,7 @@ class _ConversationListPageState extends ConsumerState<ConversationListPage> {
     try {
       final conversation = await _conversationController.createForPet(petId);
       if (mounted) {
-        context.go(AppRoutePaths.conversationDetails(conversation.id));
+        context.push(AppRoutePaths.conversationDetails(conversation.id));
       }
     } on Object {
       if (!mounted) return;
@@ -177,7 +177,7 @@ class _ConversationListBody extends StatelessWidget {
               final conversation = controller.conversations[index];
               return Card(
                 child: ListTile(
-                  onTap: () => context.go(
+                  onTap: () => context.push(
                     AppRoutePaths.conversationDetails(conversation.id),
                   ),
                   leading: const CircleAvatar(

@@ -39,10 +39,12 @@ final class HealthRecordDraft {
     required this.title,
     required this.description,
     required this.recordDate,
+    this.metadata = const {},
   });
 
   final String recordType;
   final String title;
   final String description;
   final DateTime recordDate;
+  final Map<String, dynamic> metadata;
 }

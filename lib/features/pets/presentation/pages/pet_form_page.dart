@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../app/route_paths.dart';
 import '../../../../core/error/app_exception.dart';
+import '../../../../shared/widgets/app_back_button.dart';
 import '../../application/pet_controller.dart';
 import '../../application/pet_providers.dart';
 import '../../domain/models/pet.dart';
@@ -52,19 +53,37 @@ class _PetFormPageState extends ConsumerState<PetFormPage> {
         if (_isEditing &&
             pet == null &&
             controller.status == PetListStatus.loading) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
+          return Scaffold(
+            appBar: AppBar(
+              leading: AppBackButton(
+                fallbackLocation: AppRoutePaths.petDetails(widget.petId!),
+              ),
+              title: const Text('编辑宠物'),
+            ),
+            body: const Center(child: CircularProgressIndicator()),
           );
         }
         if (_isEditing && pet == null) {
           return Scaffold(
-            appBar: AppBar(title: const Text('编辑宠物')),
+            appBar: AppBar(
+              leading: AppBackButton(
+                fallbackLocation: AppRoutePaths.petDetails(widget.petId!),
+              ),
+              title: const Text('编辑宠物'),
+            ),
             body: const Center(child: Text('未找到这只宠物。')),
           );
         }
         _populateFrom(pet);
         return Scaffold(
-          appBar: AppBar(title: Text(_isEditing ? '编辑宠物' : '创建宠物档案')),
+          appBar: AppBar(
+            leading: AppBackButton(
+              fallbackLocation: _isEditing
+                  ? AppRoutePaths.petDetails(widget.petId!)
+                  : AppRoutePaths.pets,
+            ),
+            title: Text(_isEditing ? '编辑宠物' : '创建宠物档案'),
+          ),
           body: SafeArea(
             child: Form(
               key: _formKey,
@@ -166,7 +185,12 @@ class _PetFormPageState extends ConsumerState<PetFormPage> {
       final pet = _isEditing
           ? await controller.updatePet(widget.petId!, draft)
           : await controller.createPet(draft);
-      if (mounted) context.go(AppRoutePaths.petDetails(pet.id));
+      if (!mounted) return;
+      if (_isEditing && context.canPop()) {
+        context.pop();
+      } else {
+        context.go(AppRoutePaths.petDetails(pet.id));
+      }
     } on Object catch (error) {
       if (!mounted) return;
       ScaffoldMessenger.of(

@@ -11,6 +11,7 @@ abstract final class AppRoutePaths {
   static const pets = '/pets';
   static const createPet = '/pets/new';
   static const newHealthRecord = '/health/new';
+  static const weightTrend = '/health/weight-trend';
 
   static String petDetails(String petId) => '/pets/$petId';
 
@@ -22,4 +23,7 @@ abstract final class AppRoutePaths {
   static String editHealthRecord(String recordId) => '/health/$recordId/edit';
 
   static String healthRecordDetails(String recordId) => '/health/$recordId';
+
+  static String newHealthRecordForType(String recordType) =>
+      '$newHealthRecord?type=$recordType';
 }
